@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar dark>
+    <ion-title>Gallery Details</ion-title>
+    <ion-buttons end>
+      <button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+	<ion-card class="gallery-card">
+	  <ion-card-content>
+	    <ion-card-title>
+	    	<strong>{{ gallery.name }}</strong>  
+      	</ion-card-title>
+	    <p>{{gallery.address}}</p>
+	    <a href="{{gallery.website}}">{{gallery.website}}</a>
+	    <p class="gallery-description">{{gallery.description}}</p>
+	    <hr>
+	    <p *ngIf="gallery.hours === null">
+	    	Hours Unavailable
+	    </p>
+	    <table class="gallery-hours-table" *ngIf="gallery.hours !== null">
+	      <tbody>
+	        <tr *ngFor="let hour of gallery.hours">
+	          <td class="day-cell" width="100">
+	            <strong>{{hour.day}}</strong>
+	          </td>
+	          <td colspan="2">
+	            <div *ngIf="hour.open === null || hour.close === null">
+	              Closed
+	            </div>
+	            <div *ngIf="hour.open !== null || hour.close !== null">
+	              {{ hour.open }} - {{ hour.close }}
+	            </div>
+	          </td>
+	        </tr>
+	      </tbody>
+	    </table>
+	    <a class="button button-block button-danger link-button" href="tel: {{gallery.phone}}">Call Gallery</a>
+	  </ion-card-content>
+	</ion-card>
+</ion-content>`
