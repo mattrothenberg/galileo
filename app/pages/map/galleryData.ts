@@ -289,7 +289,7 @@ export const GalleryData = [
 	address: "26 Wooster",
 	website: "https://www.leslielohman.org/",
 	phone: "(212) 431-2609",
-	description: "Hosts LGBT social, political &amp; erotic art plus educational resources, talks &amp; performances.",
+	description: "Hosts LGBT social, political, and erotic art plus educational resources, talks and performances.",
 	hours: [
 	  {day: 'Sunday', open: '12:00 pm', close: '6:00 pm' },
 	  {day: 'Monday', open: '12:00 pm', close: '6:00 pm'},
@@ -509,13 +509,6 @@ export const GalleryData = [
 	  {day: 'Friday', open: '10:00 am', close: '8:30 pm'},
 	  {day: 'Saturday', open: '10:00 am', close: '8:30 pm'}
 	]
-	}, {
-	name: "Russeck Gallery",
-	address: "478 West Broadway",
-	website: "http://www.howardrusseck.com/howardrusseck.com/Gallery.html",
-	phone: "(212) 475-9939",
-	description: "Collective of artists in one space",
-	hours: null
 	}, {
 	name: "Soho Photo Gallery",
 	address: "15 White",

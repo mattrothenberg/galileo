@@ -202,7 +202,6 @@ exports.GalleryCoordinates = [
     { pos: [40.726525, -73.999868] },
     { pos: [40.722427, -74.004239] },
     { pos: [40.72659, -74.000568] },
-    { pos: [40.726739, -74.000434] },
     { pos: [40.718974, -74.005601] },
     { pos: [40.723859, -73.99749] },
     { pos: [40.721478, -73.9971] },
@@ -508,7 +507,7 @@ exports.GalleryData = [
         address: "26 Wooster",
         website: "https://www.leslielohman.org/",
         phone: "(212) 431-2609",
-        description: "Hosts LGBT social, political &amp; erotic art plus educational resources, talks &amp; performances.",
+        description: "Hosts LGBT social, political, and erotic art plus educational resources, talks and performances.",
         hours: [
             { day: 'Sunday', open: '12:00 pm', close: '6:00 pm' },
             { day: 'Monday', open: '12:00 pm', close: '6:00 pm' },
@@ -729,13 +728,6 @@ exports.GalleryData = [
             { day: 'Saturday', open: '10:00 am', close: '8:30 pm' }
         ]
     }, {
-        name: "Russeck Gallery",
-        address: "478 West Broadway",
-        website: "http://www.howardrusseck.com/howardrusseck.com/Gallery.html",
-        phone: "(212) 475-9939",
-        description: "Collective of artists in one space",
-        hours: null
-    }, {
         name: "Soho Photo Gallery",
         address: "15 White",
         website: "http://www.sohophoto.com/",
@@ -918,7 +910,7 @@ var MapPage = (function () {
         var sohoLatLong = new google.maps.LatLng(40.7233, -74.0030);
         var map = new google.maps.Map(mapEle, {
             center: sohoLatLong,
-            zoom: 16,
+            zoom: 17,
             styles: mapstyle_1.MapStyle
         });
         function isGalleryOpen(hours) {

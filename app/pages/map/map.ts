@@ -21,7 +21,7 @@ export class MapPage {
     let sohoLatLong = new google.maps.LatLng(40.7233, -74.0030);
     let map = new google.maps.Map(mapEle, {
       center: sohoLatLong,
-      zoom: 16,
+      zoom: 17,
       styles: MapStyle
     });
 
