@@ -910,7 +910,7 @@ var MapPage = (function () {
         var mymap = L.map('map').setView([40.7233, -74.0030], 15);
         setTimeout(function () {
             mymap.invalidateSize({});
-        }, 100);
+        }, 200);
         L.tileLayer('https://api.mapbox.com/styles/v1/mattrothenberg/ciq701j2s0019bymc8zits5e4/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg', {
             attribution: '',
             maxZoom: 17,
