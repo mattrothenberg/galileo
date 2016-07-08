@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, enableProdMode} from '@angular/core';
 import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
@@ -21,6 +21,8 @@ export class MyApp {
     });
   }
 }
+
+enableProdMode();
 
 ionicBootstrap(MyApp, null, {
   tabbarPlacement: 'bottom'

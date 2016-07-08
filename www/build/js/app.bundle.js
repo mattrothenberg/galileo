@@ -32,6 +32,7 @@ var MyApp = (function () {
     return MyApp;
 }());
 exports.MyApp = MyApp;
+core_1.enableProdMode();
 ionic_angular_1.ionicBootstrap(MyApp, null, {
     tabbarPlacement: 'bottom'
 });
