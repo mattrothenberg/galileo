@@ -9424,7 +9424,8 @@ body {
   width: 100px; }
 
 .gmap {
-  height: 100%; }
+  height: 100%;
+  width: 100%; }
 
 .gm-style-mtc, .gm-svpc {
   display: none !important; }
@@ -9435,6 +9436,9 @@ ion-content {
 .gallery-card ion-card-title {
   margin-bottom: 0;
   padding-bottom: 3px; }
+
+.gallery-card .gallery-address {
+  margin: 0; }
 
 .gallery-card .gallery-description {
   margin: 5px 0 10px; }

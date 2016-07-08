@@ -23,6 +23,7 @@ body {
 
 .gmap {
 	height: 100%;
+	width: 100%;
 }
 
 .gm-style-mtc, .gm-svpc {
@@ -37,6 +38,10 @@ ion-content {
 	ion-card-title {
 		margin-bottom: 0;
 		padding-bottom: 3px;
+	}
+
+	.gallery-address {
+		margin: 0;
 	}
 
 	.gallery-description {

@@ -6,7 +6,7 @@ import {GalleryCoordinates} from './galleryCoordinates';
 import {DetailModal} from '../../components/detailModal';
 import {Modal, NavController, Page} from 'ionic-angular';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/map/map.html',
 })
 export class MapPage {
@@ -18,12 +18,19 @@ export class MapPage {
     let mapEle = document.getElementById('map');
     let ngz = this.ngZone;
     let nav = this.nav;
-    let sohoLatLong = new google.maps.LatLng(40.7233, -74.0030);
-    let map = new google.maps.Map(mapEle, {
-      center: sohoLatLong,
-      zoom: 17,
-      styles: MapStyle
-    });
+
+    let mymap = L.map('map').setView([40.7233, -74.0030], 15);
+
+    setTimeout(function() {
+      mymap.invalidateSize({});
+    }, 100);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/mattrothenberg/ciq701j2s0019bymc8zits5e4/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg', {
+        attribution: '',
+        maxZoom: 18,
+        id: 'your.mapbox.project.id',
+        accessToken: 'your.mapbox.public.access.token'
+    }).addTo(mymap);
 
     function isGalleryOpen(hours) {
       if(hours === null) {
@@ -41,32 +48,32 @@ export class MapPage {
     GalleryCoordinates.forEach(coordinatePair => {
     	let index = GalleryCoordinates.indexOf(coordinatePair);
       let galleryMatch = GalleryData[index];
-    	let googleCoordinatePair = new google.maps.LatLng(coordinatePair.pos[0], coordinatePair.pos[1]);
-      let url = isGalleryOpen(galleryMatch.hours) ? 'img/marker-open.png' : 'img/marker-closed.png';
-      let image = {
-        url: url,
-        size: new google.maps.Size(33, 51),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(0, 15)
-      };
 
-    	let marker = new google.maps.Marker({
-	    	map: map,
-        icon: image,
-	    	position: googleCoordinatePair
-	    });
+      var openIcon = L.icon({
+        iconUrl: 'img/marker-icon-open-2x.png',
+        shadowUrl: 'img/marker-shadow.png',
+        iconSize:    [25, 41],
+        iconAnchor:  [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize:  [41, 41]
+      });
 
-			google.maps.event.addListener(marker, 'click', function() {
-			  ngz.run(() => {
-			    let modal = Modal.create(DetailModal, {gallery: galleryMatch});
-			    nav.present(modal);
-			  })
-			});
+      var closedIcon = L.icon({
+        iconUrl: 'img/marker-icon-closed-2x.png',
+        shadowUrl: 'img/marker-shadow.png',
+        iconSize:    [25, 41],
+        iconAnchor:  [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize:  [41, 41]
+      });
 
+      let icon = isGalleryOpen(galleryMatch.hours) ? openIcon : closedIcon;
+
+      var marker = L.marker([coordinatePair.pos[0], coordinatePair.pos[1]], {icon: icon}).addTo(mymap);
+      marker.on('click', function(e) {
+        let modal = Modal.create(DetailModal, {gallery: galleryMatch});
+        nav.present(modal);
+      })
     })
-
-    google.maps.event.addListenerOnce(map, 'idle', () => {
-      mapEle.classList.add('show-map');
-    });
   }
 }
