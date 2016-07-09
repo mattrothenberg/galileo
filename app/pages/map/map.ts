@@ -41,11 +41,15 @@ export class MapPage {
     let mymap = L.map('map', {
       center: L.latLng(40.7233, -74.0030),
       zoom: 15,
+      minZoom: 15,
       maxZoom: 17,
+      // touchZoom: false,
       bounceAtZoomLimits: false,
     });
 
     mymap.on('zoomend', function() {
+      var finishZoomLevel = mymap.getZoom();
+      mymap.setZoom(finishZoomLevel);
       mymap.invalidateSize({});
     })
 
