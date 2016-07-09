@@ -15,17 +15,45 @@ export class MapPage {
 
   ionViewLoaded() {
     const todayAsNumber = moment().day();
+
+    var openIcon = L.icon({
+      iconUrl: 'img/marker-icon-open-2x.png',
+      shadowUrl: 'img/marker-shadow.png',
+      iconSize:    [25, 41],
+      iconAnchor:  [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize:  [41, 41]
+    });
+
+    var closedIcon = L.icon({
+      iconUrl: 'img/marker-icon-closed-2x.png',
+      shadowUrl: 'img/marker-shadow.png',
+      iconSize:    [25, 41],
+      iconAnchor:  [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize:  [41, 41]
+    });
+
     let mapEle = document.getElementById('map');
     let ngz = this.ngZone;
     let nav = this.nav;
 
-    let mymap = L.map('map').setView([40.7233, -74.0030], 15);
+    let mymap = L.map('map', {
+      center: L.latLng(40.7233, -74.0030),
+      zoom: 15,
+      maxZoom: 17,
+      bounceAtZoomLimits: false,
+    });
+
+    mymap.on('zoomend', function() {
+      mymap.invalidateSize({});
+    })
 
     setTimeout(function() {
       mymap.invalidateSize({});
     }, 200);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg', {
+    L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg', {
         attribution: '',
         maxZoom: 17,
         id: 'your.mapbox.project.id',
@@ -48,28 +76,10 @@ export class MapPage {
     GalleryCoordinates.forEach(coordinatePair => {
     	let index = GalleryCoordinates.indexOf(coordinatePair);
       let galleryMatch = GalleryData[index];
-
-      var openIcon = L.icon({
-        iconUrl: 'img/marker-icon-open-2x.png',
-        shadowUrl: 'img/marker-shadow.png',
-        iconSize:    [25, 41],
-        iconAnchor:  [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize:  [41, 41]
-      });
-
-      var closedIcon = L.icon({
-        iconUrl: 'img/marker-icon-closed-2x.png',
-        shadowUrl: 'img/marker-shadow.png',
-        iconSize:    [25, 41],
-        iconAnchor:  [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize:  [41, 41]
-      });
-
       let icon = isGalleryOpen(galleryMatch.hours) ? openIcon : closedIcon;
 
       var marker = L.marker([coordinatePair.pos[0], coordinatePair.pos[1]], {icon: icon}).addTo(mymap);
+      
       marker.on('click', function(e) {
         let modal = Modal.create(DetailModal, {gallery: galleryMatch});
         nav.present(modal);

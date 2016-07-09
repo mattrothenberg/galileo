@@ -110,13 +110,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var moment = require('moment');
 var core_1 = require('@angular/core');
 var galleryData_1 = require('../map/galleryData');
+var detailModal_1 = require('../../components/detailModal');
 var ionic_angular_1 = require('ionic-angular');
 var ListPage = (function () {
     function ListPage(navController) {
         this.navController = navController;
         this.todayAsNumber = moment().day();
         this.initializeGalleries();
+        this.navController = navController;
     }
+    ListPage.prototype.showModal = function (gallery) {
+        var modal = ionic_angular_1.Modal.create(detailModal_1.DetailModal, { gallery: gallery });
+        this.navController.present(modal);
+    };
     ListPage.prototype.initializeGalleries = function () {
         this.galleries = galleryData_1.GalleryData;
     };
@@ -166,7 +172,7 @@ var ListPage = (function () {
 }());
 exports.ListPage = ListPage;
 
-},{"../map/galleryData":6,"@angular/core":155,"ionic-angular":419,"moment":513}],5:[function(require,module,exports){
+},{"../../components/detailModal":2,"../map/galleryData":6,"@angular/core":155,"ionic-angular":419,"moment":513}],5:[function(require,module,exports){
 "use strict";
 exports.GalleryCoordinates = [
     { pos: [40.722248, -74.001546] },
@@ -177,7 +183,7 @@ exports.GalleryCoordinates = [
     { pos: [40.718099, -74.001882] },
     { pos: [40.726637, -74.000391] },
     { pos: [40.725927, -74.000422] },
-    { pos: [40.776927, -73.873966] },
+    { pos: [40.728823, -73.998609] },
     { pos: [40.72561, -73.998687] },
     { pos: [40.721142, -73.99881] },
     { pos: [40.723038, -73.99914] },
@@ -211,7 +217,7 @@ exports.GalleryCoordinates = [
     { pos: [40.722756, -74.002589] },
     { pos: [40.722446, -74.002957] },
     { pos: [40.72428, -73.997354] },
-    { pos: [40.776927, -73.873966] },
+    { pos: [40.728499, -73.998890] },
     { pos: [40.726126, -74.002067] }
 ];
 
@@ -340,7 +346,7 @@ exports.GalleryData = [
         ]
     }, {
         name: "Center for Architecture",
-        address: "536 La Guardia",
+        address: "536 Laguardia",
         website: "http://cfa.aiany.org/",
         phone: "(212) 683-0023",
         description: "The Center for Architecture is a destination for all interested in the built environment",
@@ -904,14 +910,38 @@ var MapPage = (function () {
     }
     MapPage.prototype.ionViewLoaded = function () {
         var todayAsNumber = moment().day();
+        var openIcon = L.icon({
+            iconUrl: 'img/marker-icon-open-2x.png',
+            shadowUrl: 'img/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+        var closedIcon = L.icon({
+            iconUrl: 'img/marker-icon-closed-2x.png',
+            shadowUrl: 'img/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
         var mapEle = document.getElementById('map');
         var ngz = this.ngZone;
         var nav = this.nav;
-        var mymap = L.map('map').setView([40.7233, -74.0030], 15);
+        var mymap = L.map('map', {
+            center: L.latLng(40.7233, -74.0030),
+            zoom: 15,
+            maxZoom: 17,
+            bounceAtZoomLimits: false,
+        });
+        mymap.on('zoomend', function () {
+            mymap.invalidateSize({});
+        });
         setTimeout(function () {
             mymap.invalidateSize({});
         }, 200);
-        L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg', {
+        L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg', {
             attribution: '',
             maxZoom: 17,
             id: 'your.mapbox.project.id',
@@ -932,22 +962,6 @@ var MapPage = (function () {
         galleryCoordinates_1.GalleryCoordinates.forEach(function (coordinatePair) {
             var index = galleryCoordinates_1.GalleryCoordinates.indexOf(coordinatePair);
             var galleryMatch = galleryData_1.GalleryData[index];
-            var openIcon = L.icon({
-                iconUrl: 'img/marker-icon-open-2x.png',
-                shadowUrl: 'img/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
-            var closedIcon = L.icon({
-                iconUrl: 'img/marker-icon-closed-2x.png',
-                shadowUrl: 'img/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
             var icon = isGalleryOpen(galleryMatch.hours) ? openIcon : closedIcon;
             var marker = L.marker([coordinatePair.pos[0], coordinatePair.pos[1]], { icon: icon }).addTo(mymap);
             marker.on('click', function (e) {

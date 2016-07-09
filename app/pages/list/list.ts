@@ -1,7 +1,8 @@
 import * as moment from 'moment';
 import {Component} from '@angular/core';
 import {GalleryData} from '../map/galleryData';
-import {NavController} from 'ionic-angular';
+import {DetailModal} from '../../components/detailModal';
+import {Modal, NavController} from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/list/list.html'
@@ -12,6 +13,12 @@ export class ListPage {
 
   constructor(private navController: NavController) {
       this.initializeGalleries();
+      this.navController = navController;
+  }
+
+  showModal(gallery) {
+    let modal = Modal.create(DetailModal, {gallery: gallery});
+    this.navController.present(modal);
   }
 
   initializeGalleries() {

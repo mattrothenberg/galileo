@@ -121,7 +121,7 @@ export const GalleryData = [
 	]
 	}, {
 	name: "Center for Architecture",
-	address: "536 La Guardia",
+	address: "536 Laguardia",
 	website: "http://cfa.aiany.org/",
 	phone: "(212) 683-0023",
 	description: "The Center for Architecture is a destination for all interested in the built environment",
