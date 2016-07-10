@@ -9482,3 +9482,6 @@ ion-content {
 
 ion-card p {
   margin: 0 0 10px 0; }
+
+.mapboxgl-ctrl-attrib.mapboxgl-ctrl {
+  display: none !important; }

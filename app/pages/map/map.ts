@@ -1,8 +1,6 @@
 import {Component, NgZone} from '@angular/core';
 import * as moment from 'moment';
 import {MapStyle} from './mapstyle';
-import {GalleryData} from './galleryData';
-import {GalleryCoordinates} from './galleryCoordinates';
 import {DetailModal} from '../../components/detailModal';
 import {Modal, NavController, Page} from 'ionic-angular';
 
@@ -11,83 +9,57 @@ import {Modal, NavController, Page} from 'ionic-angular';
 })
 export class MapPage {
 
-  constructor(private nav: NavController, private ngZone: NgZone) {}
+  constructor(private nav: NavController, private ngZone: NgZone) {
+    this.nav = nav;
+  }
 
   ionViewLoaded() {
-    const todayAsNumber = moment().day();
-
-    var openIcon = L.icon({
-      iconUrl: 'img/marker-icon-open-2x.png',
-      shadowUrl: 'img/marker-shadow.png',
-      iconSize:    [25, 41],
-      iconAnchor:  [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize:  [41, 41]
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mattrothenberg/ciq701j2s0019bymc8zits5e4',
+        center: [-74.0030, 40.7233],
+        // dragRotate: false,
+        // touchZoomRotate: false,
+        zoom: 15,
+        minZoom: 11,
+        maxZoom: 18
     });
 
-    var closedIcon = L.icon({
-      iconUrl: 'img/marker-icon-closed-2x.png',
-      shadowUrl: 'img/marker-shadow.png',
-      iconSize:    [25, 41],
-      iconAnchor:  [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize:  [41, 41]
-    });
-
-    let mapEle = document.getElementById('map');
-    let ngz = this.ngZone;
-    let nav = this.nav;
-
-    let mymap = L.map('map', {
-      center: L.latLng(40.7233, -74.0030),
-      zoom: 15,
-      minZoom: 15,
-      maxZoom: 17,
-      // touchZoom: false,
-      bounceAtZoomLimits: false,
-    });
-
-    mymap.on('zoomend', function() {
-      var finishZoomLevel = mymap.getZoom();
-      mymap.setZoom(finishZoomLevel);
-      mymap.invalidateSize({});
-    })
+    var nav = this.nav;
 
     setTimeout(function() {
-      mymap.invalidateSize({});
+      map.resize();
     }, 200);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWF0dHJvdGhlbmJlcmciLCJhIjoiY2lxNzAxM2k1MDBqN2ZxbTZwcXQ1cndicyJ9.JCea1zx6hAn6J8cWL0tGsg', {
-        attribution: '',
-        maxZoom: 17,
-        id: 'your.mapbox.project.id',
-        accessToken: 'your.mapbox.public.access.token'
-    }).addTo(mymap);
+    map.on('load', function () {
+      map.addSource("points", {
+        "type": "geojson",
+        "data": "./data/galleries.geojson"
+      });
 
-    function isGalleryOpen(hours) {
-      if(hours === null) {
-        return false;
-      } else {
-        let matchedHours = hours[todayAsNumber];
-        let open = moment(matchedHours.open, 'HH:mm A');
-        let close = moment(matchedHours.close, 'HH:mm A');
-        let currentTime = moment();
+      map.addLayer({
+          "id": "points",
+          "type": "symbol",
+          "source": "points",
+          "layout": {
+            "icon-image": "{icon}-15",
+            "icon-size": 1.5,
+            "icon-allow-overlap": true,
+          }
+      });
+  });
 
-        return currentTime.isAfter(open) && currentTime.isBefore(close);
-      }
+    map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['points'] });
+
+    if (!features.length) {
+        return;
     }
 
-    GalleryCoordinates.forEach(coordinatePair => {
-    	let index = GalleryCoordinates.indexOf(coordinatePair);
-      let galleryMatch = GalleryData[index];
-      let icon = isGalleryOpen(galleryMatch.hours) ? openIcon : closedIcon;
-
-      var marker = L.marker([coordinatePair.pos[0], coordinatePair.pos[1]], {icon: icon}).addTo(mymap);
-      
-      marker.on('click', function(e) {
-        let modal = Modal.create(DetailModal, {gallery: galleryMatch});
-        nav.present(modal);
-      })
-    })
+    var feature = features[0];
+      let modal = Modal.create(DetailModal, {gallery: feature.properties});
+      nav.present(modal);
+    });
   }
 }
