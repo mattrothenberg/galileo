@@ -6,7 +6,7 @@ export const GalleryData = [
 	phone: "(212) 226-7374",
 	description: "Illustrators, pop culture commercial artists, fine artists",
 	hours: [
-	  {day: 'Sunday', open: '11:00 am', close: '6:00 pm' },
+	  {day: 'Sunday', open: '11:00 am', close: '9:00 pm' },
 	  {day: 'Monday', open: '10:00 am', close: '7:00 pm' },
 	  {day: 'Tuesday', open: '10:00 am', close: '7:00 pm' },
 	  {day: 'Wednesday', open: '10:00 am', close: '7:00 pm' },
@@ -659,4 +659,4 @@ export const GalleryData = [
 	  {day: 'Friday', open: '11:00 am', close: '6:00 pm'},
 	  {day: 'Saturday', open: '11:00 am', close: '6:00 pm'}
 	]
-}];
+}]

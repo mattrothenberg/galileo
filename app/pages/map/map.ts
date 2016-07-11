@@ -1,6 +1,7 @@
-import {Component, NgZone} from '@angular/core';
+import {Component} from '@angular/core';
 import * as moment from 'moment';
 import {MapStyle} from './mapstyle';
+import {GalleryJson} from './galleries';
 import {DetailModal} from '../../components/detailModal';
 import {Modal, NavController, Page} from 'ionic-angular';
 
@@ -8,8 +9,9 @@ import {Modal, NavController, Page} from 'ionic-angular';
   templateUrl: 'build/pages/map/map.html',
 })
 export class MapPage {
+  todayAsString = moment().format('dddd').toLowerCase();
 
-  constructor(private nav: NavController, private ngZone: NgZone) {
+  constructor(private nav: NavController) {
     this.nav = nav;
   }
 
@@ -32,23 +34,52 @@ export class MapPage {
       map.resize();
     }, 200);
 
+    let newFeatures = [];
+
+    for(var i = 0; i < GalleryJson.features.length; i++) {
+      var galleryInQuestion = GalleryJson.features[i].properties;
+      var openHour = moment(galleryInQuestion[this.todayAsString + '_open'], 'HH:mm A');
+      var closeHour = moment(galleryInQuestion[this.todayAsString + '_close'], 'HH:mm A');
+      var currentTime = moment();
+      var openCoefficient = currentTime.isAfter(openHour) && currentTime.isBefore(closeHour) ? 1 : 0;
+      galleryInQuestion['foop'] = openCoefficient
+      newFeatures.push(GalleryJson.features[i]);
+    }
+
+
     map.on('load', function () {
-      map.addSource("points", {
-        "type": "geojson",
-        "data": "./data/galleries.geojson"
-      });
+      var geoJsonSource = new mapboxgl.GeoJSONSource({
+        data: {
+          "type": "FeatureCollection",
+          "features": newFeatures
+        }
+      })
+
+      map.addSource("points", geoJsonSource)
 
       map.addLayer({
-          "id": "points",
-          "type": "symbol",
-          "source": "points",
-          "layout": {
-            "icon-image": "{icon}-15",
-            "icon-size": 1.5,
-            "icon-allow-overlap": true,
+        "id": "points",
+        "type": 'circle',
+        "source": 'points',
+        paint: {
+          'circle-opacity': {
+            property: 'foop',
+            stops: [
+              [0, .55],
+              [1, 1]
+            ]
+          },
+          'circle-color': {
+            property: 'foop',
+              stops: [
+                [0, '#FFFFFF'],
+                [1, '#FF0000']
+              ]
+            },
+            'circle-radius': 8
           }
       });
-  });
+    });
 
     map.on('click', function (e) {
     var features = map.queryRenderedFeatures(e.point, { layers: ['points'] });
@@ -59,6 +90,7 @@ export class MapPage {
 
     var feature = features[0];
       let modal = Modal.create(DetailModal, {gallery: feature.properties});
+      console.log(feature.properties);
       nav.present(modal);
     });
   }
