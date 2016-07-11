@@ -2270,7 +2270,7 @@ var MapPage = (function () {
                             [1, '#FF0000']
                         ]
                     },
-                    'circle-radius': 8
+                    'circle-radius': 10
                 }
             });
         });
