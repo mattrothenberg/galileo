@@ -76,7 +76,7 @@ export class MapPage {
                 [1, '#FF0000']
               ]
             },
-            'circle-radius': 10
+            'circle-radius': 13
           }
       });
     });

@@ -16,7 +16,7 @@ export const GalleryJson = {
     "description":"Illustrators, pop culture commercial artists, fine artists",
     "coordinates":"40.722248,-74.001546",
     "sunday_open":"11:00 AM",
-    "sunday_close":"9:00 PM",
+    "sunday_close":"6:00 PM",
     "monday_open":"10:00 AM",
     "monday_close":"7:00 PM",
     "tuesday_open":"10:00 AM",
