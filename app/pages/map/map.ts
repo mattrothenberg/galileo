@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import {MapStyle} from './mapstyle';
 import {GalleryJson} from './galleries';
 import {DetailModal} from '../../components/detailModal';
-import {Modal, NavController, Page} from 'ionic-angular';
+import {Modal, NavController, Page, Loading} from 'ionic-angular';
 
 @Component({
   templateUrl: 'build/pages/map/map.html',
@@ -29,6 +29,13 @@ export class MapPage {
     });
 
     var nav = this.nav;
+
+    let loading = Loading.create({
+      content: "Please wait...",
+      duration: 3000
+    });
+
+    this.nav.present(loading);
 
     setTimeout(function() {
       map.resize();
@@ -79,6 +86,9 @@ export class MapPage {
             'circle-radius': 13
           }
       });
+
+      loading.dismiss();
+      
     });
 
     map.on('click', function (e) {

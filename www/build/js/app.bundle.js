@@ -2230,6 +2230,11 @@ var MapPage = (function () {
             maxZoom: 18
         });
         var nav = this.nav;
+        var loading = ionic_angular_1.Loading.create({
+            content: "Please wait...",
+            duration: 3000
+        });
+        this.nav.present(loading);
         setTimeout(function () {
             map.resize();
         }, 200);
@@ -2270,9 +2275,10 @@ var MapPage = (function () {
                             [1, '#FF0000']
                         ]
                     },
-                    'circle-radius': 12
+                    'circle-radius': 13
                 }
             });
+            loading.dismiss();
         });
         map.on('click', function (e) {
             var features = map.queryRenderedFeatures(e.point, { layers: ['points'] });
