@@ -81,7 +81,7 @@ export class MapPage {
                 [1, '#e74c3c']
               ]
             },
-            'circle-radius': 10
+            'circle-radius': 12
           }
       });
 

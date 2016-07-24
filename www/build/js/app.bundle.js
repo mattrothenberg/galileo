@@ -1609,7 +1609,7 @@ var MapPage = (function () {
                             [1, '#e74c3c']
                         ]
                     },
-                    'circle-radius': 10
+                    'circle-radius': 12
                 }
             });
             loading.dismiss();
