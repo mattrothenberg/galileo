@@ -21,8 +21,6 @@ export class MapPage {
         container: 'map',
         style: 'mapbox://styles/mattrothenberg/ciq701j2s0019bymc8zits5e4',
         center: [-74.0030, 40.7233],
-        // dragRotate: false,
-        // touchZoomRotate: false,
         zoom: 15,
         minZoom: 11,
         maxZoom: 18
@@ -100,7 +98,6 @@ export class MapPage {
 
     var feature = features[0];
       let modal = Modal.create(DetailModal, {gallery: feature.properties});
-      console.log(feature.properties);
       nav.present(modal);
     });
   }

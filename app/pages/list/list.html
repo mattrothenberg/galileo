@@ -11,16 +11,16 @@
   <ion-card *ngFor="let gallery of galleries" class="gallery-card" (tap)="showModal(gallery)">
     <ion-item>
       <ion-card-title>
-        {{ gallery.name }}
+        {{ gallery.properties.name }}
       </ion-card-title>
-      <p>{{ gallery.address }}</p>
-      <p>{{ gallery.description }}</p>  
-      <ion-icon class="open-indicator" name="disc" item-right [ngClass]="{'open': galleryIsOpen(gallery.hours)}"></ion-icon>
+      <p>{{ gallery.properties.address }}</p>
+      <p>{{ gallery.properties.description }}</p>
+      <ion-icon class="open-indicator" name="disc" item-right [ngClass]="{'open': galleryIsOpen(gallery.properties)}"></ion-icon>
     </ion-item>
     <ion-item class="card-footer">
       <p>
-        <strong>HOURS</strong>
-        <span>{{todaysHours(gallery.hours)}}</span>
+        <strong>HOURS TODAY:</strong>
+        <span>{{todaysHours(gallery.properties)}}</span>
       </p>
     </ion-item>
   </ion-card>

@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import {Component} from '@angular/core';
-import {GalleryData} from '../map/galleryData';
+import {GalleryJson} from '../map/galleries';
 import {DetailModal} from '../../components/detailModal';
 import {Modal, NavController} from 'ionic-angular';
 
@@ -10,6 +10,7 @@ import {Modal, NavController} from 'ionic-angular';
 export class ListPage {  
   galleries;
   todayAsNumber = moment().day();
+  todayAsString = moment().format('dddd').toLowerCase();
 
   constructor(private navController: NavController) {
       this.initializeGalleries();
@@ -17,12 +18,12 @@ export class ListPage {
   }
 
   showModal(gallery) {
-    let modal = Modal.create(DetailModal, {gallery: gallery});
+    var modal = Modal.create(DetailModal, {gallery: gallery.properties});
     this.navController.present(modal);
   }
 
   initializeGalleries() {
-      this.galleries = GalleryData;
+      this.galleries = GalleryJson.features;
   }
 
   getItems(ev) {
@@ -30,31 +31,33 @@ export class ListPage {
     let val = ev.target.value;
     if (val && val.trim() != '') {
         this.galleries = this.galleries.filter((gallery) => {
-            return (gallery.name.toLowerCase().indexOf(val.toLowerCase()) > -1) ||
-                   (gallery.address.toLowerCase().indexOf(val.toLowerCase()) > -1);
+            return (gallery.properties.name.toLowerCase().indexOf(val.toLowerCase()) > -1) ||
+                   (gallery.properties.address.toLowerCase().indexOf(val.toLowerCase()) > -1);
         })
     }
   }
 
-  todaysHours(hours) {
-     if (hours === null) {
-         return 'Closed'
-     } else if (hours[this.todayAsNumber].open === null) {
-         return 'Hours Unavailable'
-     } else {
-         return hours[this.todayAsNumber].open + ' - ' + hours[this.todayAsNumber].close;
-     }
+  todaysHours(gallery) {
+    var openAt = gallery[this.todayAsString + '_open'];
+    var closedAt = gallery[this.todayAsString + '_close'];
+
+    if (openAt.length == 0 || closedAt.length == 0) {
+      return 'Hours Unavaialble'
+    } else {
+      return openAt + ' - ' + closedAt;
+    }
   }
 
-  galleryIsOpen(hours) {
-      if(hours === null) {
+  galleryIsOpen(gallery) {
+      var openAt = gallery[this.todayAsString + '_open'];
+      var closedAt = gallery[this.todayAsString + '_close'];
+
+      if ( openAt.length == 0 || closedAt.length == 0 ) {
         return false;
       } else {
-        let matchedHours = hours[this.todayAsNumber];
-        let open = moment(matchedHours.open, 'HH:mm A');
-        let close = moment(matchedHours.close, 'HH:mm A');
+        let open = moment(openAt, 'HH:mm A');
+        let close = moment(closedAt, 'HH:mm A');
         let currentTime = moment();
-
         return currentTime.isAfter(open) && currentTime.isBefore(close);
       }
   }
