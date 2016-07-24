@@ -70,7 +70,7 @@ export class MapPage {
           'circle-opacity': {
             property: 'foop',
             stops: [
-              [0, .55],
+              [0, .75],
               [1, 1]
             ]
           },
@@ -78,10 +78,10 @@ export class MapPage {
             property: 'foop',
               stops: [
                 [0, '#FFFFFF'],
-                [1, '#FF0000']
+                [1, '#e74c3c']
               ]
             },
-            'circle-radius': 13
+            'circle-radius': 10
           }
       });
 
